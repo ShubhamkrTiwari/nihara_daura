@@ -181,7 +181,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                   Row(
                     children: [
                       Text(
-                        '\$${product.price.toStringAsFixed(2)}',
+                        '₹${product.price.toStringAsFixed(0)}',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -191,7 +191,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                       if (product.hasDiscount) ...[
                         const SizedBox(width: 10),
                         Text(
-                          '\$${product.originalPrice!.toStringAsFixed(2)}',
+                          '₹${product.originalPrice!.toStringAsFixed(0)}',
                           style: const TextStyle(
                             fontSize: 16,
                             color: AppColors.textSecondary,
@@ -388,7 +388,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                     ),
                     const SizedBox(height: 12),
                     SizedBox(
-                      height: 240,
+                      height: 250,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: relatedProducts.length,

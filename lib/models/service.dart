@@ -1,7 +1,7 @@
 class BeautyService {
   final String id;
   final String title;
-  final String category; // Makeup, Nails, Jewellery Styling, Home Spa
+  final String category; // Makeup, Nails, Jewellery Styling
   final String duration; // e.g. "90 Mins"
   final double price;
   final double rating;

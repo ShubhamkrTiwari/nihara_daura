@@ -310,7 +310,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${s.duration} • \$${s.price.toStringAsFixed(2)}',
+                            '${s.duration} • ₹${s.price.toStringAsFixed(0)}',
                             style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                         ],
@@ -434,7 +434,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('At Home Luxury Service (+\$25)', style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text('At Home Luxury Service (+₹500)', style: TextStyle(fontWeight: FontWeight.bold)),
                           Text('Therapist visits your home with full equipment', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
                         ],
                       ),
@@ -559,7 +559,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
       case 4:
       default:
         final servicePrice = _selectedService?.price ?? 0.0;
-        final extraCharge = _locationType == 'At Home Service' ? 25.0 : 0.0;
+        final extraCharge = _locationType == 'At Home Service' ? 500.0 : 0.0;
         final total = servicePrice + extraCharge;
 
         return Column(
@@ -599,15 +599,15 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                     _buildSummaryRow('Address', _addressController.text),
                   _buildSummaryRow('Artist', _selectedArtist?.name ?? 'Any Senior Specialist'),
                   const Divider(height: 24),
-                  _buildSummaryRow('Service Charge', '\$${servicePrice.toStringAsFixed(2)}'),
+                  _buildSummaryRow('Service Charge', '₹${servicePrice.toStringAsFixed(0)}'),
                   if (extraCharge > 0)
-                    _buildSummaryRow('At-Home Travel Charge', '\$${extraCharge.toStringAsFixed(2)}'),
+                    _buildSummaryRow('At-Home Travel Charge', '₹${extraCharge.toStringAsFixed(0)}'),
                   const Divider(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Total Payable', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text('\$${total.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.secondary)),
+                      Text('₹${total.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.secondary)),
                     ],
                   ),
                 ],

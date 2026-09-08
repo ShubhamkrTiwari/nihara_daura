@@ -115,7 +115,7 @@ class ServiceCard extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '\$${service.price.toStringAsFixed(2)}',
+                          '₹${service.price.toStringAsFixed(0)}',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

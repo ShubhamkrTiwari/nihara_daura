@@ -60,7 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                         const SizedBox(height: 2),
                         const Text(
-                          'Nihara Luxury',
+                          'Nihara D Aura',
                           style: TextStyle(
                             fontFamily: 'Playfair Display',
                             fontSize: 24,
@@ -330,7 +330,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'At-Home Bridal & Glam Services',
+                              'Bridal & Glam Styling Services',
                               style: TextStyle(
                                 fontFamily: 'Playfair Display',
                                 fontSize: 15,
@@ -340,7 +340,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Book expert stylists for makeup, nails & spa.',
+                              'Book expert artists for makeup, nails & jewellery.',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: AppColors.textSecondary.withValues(alpha: 0.9),
@@ -436,7 +436,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
 
-            // Salon & Spa Experience Section Header
+            // Salon & Beauty Services Section Header
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -468,4 +468,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
+}
+
+class Aura {
 }

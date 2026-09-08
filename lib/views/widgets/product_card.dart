@@ -118,7 +118,7 @@ class ProductCard extends ConsumerWidget {
             // Details Section
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +146,7 @@ class ProductCard extends ConsumerWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 1),
                         RatingStars(
                           rating: product.rating,
                           reviewCount: product.reviewCount,
@@ -163,7 +163,7 @@ class ProductCard extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '\$${product.price.toStringAsFixed(2)}',
+                                '₹${product.price.toStringAsFixed(0)}',
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
@@ -172,9 +172,11 @@ class ProductCard extends ConsumerWidget {
                               ),
                               if (product.hasDiscount)
                                 Text(
-                                  '\$${product.originalPrice!.toStringAsFixed(2)}',
+                                  '₹${product.originalPrice!.toStringAsFixed(0)}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontSize: 9,
+                                    fontSize: 8,
                                     color: AppColors.textSecondary,
                                     decoration: TextDecoration.lineThrough,
                                   ),

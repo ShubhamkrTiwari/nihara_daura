@@ -104,17 +104,17 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
 
                   // Price Range
                   Text(
-                    'Max Price: \$${filter.maxPrice.toInt()}',
+                    'Max Price: ₹${filter.maxPrice.toInt()}',
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                   Slider(
                     value: filter.maxPrice,
-                    min: 10,
-                    max: 500,
-                    divisions: 49,
+                    min: 500,
+                    max: 20000,
+                    divisions: 39,
                     activeColor: AppColors.secondary,
                     inactiveColor: AppColors.border,
-                    label: '\$${filter.maxPrice.toInt()}',
+                    label: '₹${filter.maxPrice.toInt()}',
                     onChanged: (val) {
                       ref.read(productFilterProvider.notifier).update(
                             (s) => s.copyWith(maxPrice: val),

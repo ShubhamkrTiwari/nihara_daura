@@ -243,7 +243,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             ),
                           ),
                           Text(
-                            '\$${item.totalPrice.toStringAsFixed(2)}',
+                            '₹${item.totalPrice.toStringAsFixed(0)}',
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                         ],
@@ -256,7 +256,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     children: [
                       const Text('Total Amount', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                       Text(
-                        '\$${cartState.total.toStringAsFixed(2)}',
+                        '₹${cartState.total.toStringAsFixed(0)}',
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.secondary),
                       ),
                     ],
@@ -268,7 +268,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             const SizedBox(height: 32),
 
             CustomButton(
-              text: 'Place Order (${cartState.total.toStringAsFixed(2)})',
+              text: 'Place Order (₹${cartState.total.toStringAsFixed(0)})',
               width: double.infinity,
               onPressed: _placeOrder,
               icon: Icons.check_circle_rounded,

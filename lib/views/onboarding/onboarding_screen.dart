@@ -28,10 +28,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       badge: 'JEWELLERY & NAILS',
     ),
     OnboardingData(
-      title: 'Aromatic Ambiance & At-Home Spa',
-      subtitle: 'Immerse in soy wax candles with Royal Mogra Jasmine notes or book expert therapists directly to your home.',
+      title: 'Aromatic Ambiance & Home Fragrances',
+      subtitle: 'Immerse in soy wax candles with Royal Mogra Jasmine notes or book expert beauty artists directly for salon services.',
       imageUrl: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&q=80',
-      badge: 'CANDLES & AT-HOME SERVICES',
+      badge: 'CANDLES & SALON SERVICES',
     ),
   ];
 

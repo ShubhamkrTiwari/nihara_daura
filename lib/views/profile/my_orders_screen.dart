@@ -88,7 +88,7 @@ class MyOrdersScreen extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              Text('\$${item.totalPrice.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text('₹${item.totalPrice.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                             ],
                           ),
                         );
@@ -99,7 +99,7 @@ class MyOrdersScreen extends ConsumerWidget {
                         children: [
                           const Text('Total Amount Paid', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                           Text(
-                            '\$${order.totalAmount.toStringAsFixed(2)}',
+                            '₹${order.totalAmount.toStringAsFixed(0)}',
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.secondary),
                           ),
                         ],

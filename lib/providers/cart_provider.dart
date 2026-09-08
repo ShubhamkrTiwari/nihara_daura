@@ -19,7 +19,7 @@ class CartState {
 
   double get discountAmount => subtotal * (discountPercent / 100);
 
-  double get deliveryFee => subtotal > 100 || subtotal == 0 ? 0.0 : 15.0;
+  double get deliveryFee => subtotal > 2000 || subtotal == 0 ? 0.0 : 150.0;
 
   double get total => subtotal - discountAmount + deliveryFee;
 

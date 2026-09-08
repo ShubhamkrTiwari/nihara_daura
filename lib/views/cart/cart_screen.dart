@@ -129,7 +129,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    '\$${item.totalPrice.toStringAsFixed(2)}',
+                                    '₹${item.totalPrice.toStringAsFixed(0)}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.secondary,
@@ -277,17 +277,17 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildRow('Subtotal', '\$${cartState.subtotal.toStringAsFixed(2)}'),
+                        _buildRow('Subtotal', '₹${cartState.subtotal.toStringAsFixed(0)}'),
                         if (cartState.discountAmount > 0)
-                          _buildRow('Promo Discount', '-\$${cartState.discountAmount.toStringAsFixed(2)}', isDiscount: true),
-                        _buildRow('Delivery Fee', cartState.deliveryFee == 0 ? 'FREE' : '\$${cartState.deliveryFee.toStringAsFixed(2)}'),
+                          _buildRow('Promo Discount', '-₹${cartState.discountAmount.toStringAsFixed(0)}', isDiscount: true),
+                        _buildRow('Delivery Fee', cartState.deliveryFee == 0 ? 'FREE' : '₹${cartState.deliveryFee.toStringAsFixed(0)}'),
                         const Divider(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Total Amount', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                             Text(
-                              '\$${cartState.total.toStringAsFixed(2)}',
+                              '₹${cartState.total.toStringAsFixed(0)}',
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.secondary),
                             ),
                           ],
