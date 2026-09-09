@@ -56,7 +56,7 @@ class CategoriesScreen extends ConsumerWidget {
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.bgGradient),
         child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 110),
           itemCount: _categories.length,
           itemBuilder: (context, index) {
             final cat = _categories[index];

@@ -18,7 +18,7 @@ class ProfileScreen extends ConsumerWidget {
         height: double.infinity,
         decoration: const BoxDecoration(gradient: AppColors.bgGradient),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
           child: Column(
             children: [
               // User Header Card

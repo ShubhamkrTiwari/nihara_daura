@@ -358,7 +358,7 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
                       ),
                     )
                   : GridView.builder(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.65,

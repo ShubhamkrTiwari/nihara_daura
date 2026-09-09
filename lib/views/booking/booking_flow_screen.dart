@@ -19,7 +19,7 @@ class BookingFlowScreen extends ConsumerStatefulWidget {
 class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
   int _currentStep = 0;
 
-  BeautyService? _selectedService;
+  List<BeautyService> _selectedServices = [];
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   String _selectedTimeSlot = '11:00 AM';
   String _locationType = 'At Salon'; // 'At Salon' or 'At Home Service'
@@ -42,8 +42,8 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
   void initState() {
     super.initState();
     final draft = ref.read(bookingDraftProvider);
-    if (draft.service != null) {
-      _selectedService = draft.service;
+    if (draft.selectedServices.isNotEmpty) {
+      _selectedServices = List.from(draft.selectedServices);
     }
   }
 
@@ -54,9 +54,9 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
   }
 
   void _nextStep() {
-    if (_currentStep == 0 && _selectedService == null) {
+    if (_currentStep == 0 && _selectedServices.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a service first')),
+        const SnackBar(content: Text('Please select at least one service to proceed')),
       );
       return;
     }
@@ -79,7 +79,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
 
   void _confirmBooking() {
     final draft = BookingDraft(
-      service: _selectedService,
+      selectedServices: _selectedServices,
       date: _selectedDate,
       timeSlot: _selectedTimeSlot,
       locationType: _locationType,
@@ -101,7 +101,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
-                color: AppColors.roseLight,
+                color: AppColors.goldLight,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.check_circle_rounded, color: AppColors.secondary, size: 48),
@@ -127,7 +127,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Your service for "${booking.service.title}" is scheduled for ${DateFormat('EEE, MMM d, yyyy').format(booking.date)} at ${booking.timeSlot}.',
+              '${booking.services.length} services scheduled for ${DateFormat('EEE, MMM d, yyyy').format(booking.date)} at ${booking.timeSlot}.',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
             ),
@@ -151,105 +151,107 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
     final services = ref.watch(servicesProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: NiharaAppBar(
-        title: 'Book Service',
+        title: 'Book Services',
         showBackButton: _currentStep > 0,
       ),
-      body: Column(
-        children: [
-          // Step Progress Bar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            color: AppColors.white,
-            child: Row(
-              children: List.generate(5, (index) {
-                final isActive = index <= _currentStep;
-                return Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: isActive ? AppColors.secondary : AppColors.border,
-                      borderRadius: BorderRadius.circular(2),
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppColors.bgGradient),
+        child: Column(
+          children: [
+            // Step Progress Bar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              color: AppColors.white,
+              child: Row(
+                children: List.generate(5, (index) {
+                  final isActive = index <= _currentStep;
+                  return Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: isActive ? AppColors.secondary : AppColors.border,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+
+            // Header Title for Step
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _getStepTitle(_currentStep),
+                    style: const TextStyle(
+                      fontFamily: 'Playfair Display',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                );
-              }),
-            ),
-          ),
-
-          // Header Title for Step
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  _getStepTitle(_currentStep),
-                  style: const TextStyle(
-                    fontFamily: 'Playfair Display',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                  Text(
+                    'Step ${_currentStep + 1} of 5',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.secondary,
+                    ),
                   ),
-                ),
-                Text(
-                  'Step ${_currentStep + 1} of 5',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.secondary,
+                ],
+              ),
+            ),
+
+            // Step Content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: _buildStepContent(services),
+              ),
+            ),
+
+            // Navigation Footer with 115px bottom padding so floating navbar sits completely below Back & Continue
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 115),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.shadow.withValues(alpha: 0.08),
+                    blurRadius: 10,
+                    offset: const Offset(0, -4),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // Step Content
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: _buildStepContent(services),
-            ),
-          ),
-
-          // Navigation Footer
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.shadow.withValues(alpha: 0.08),
-                  blurRadius: 10,
-                  offset: const Offset(0, -4),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                if (_currentStep > 0) ...[
+                ],
+              ),
+              child: Row(
+                children: [
+                  if (_currentStep > 0) ...[
+                    Expanded(
+                      child: CustomButton(
+                        text: 'Back',
+                        isOutlined: true,
+                        onPressed: _previousStep,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
                   Expanded(
                     child: CustomButton(
-                      text: 'Back',
-                      isOutlined: true,
-                      onPressed: _previousStep,
+                      text: _currentStep == 4 ? 'Confirm & Book' : 'Continue',
+                      onPressed: _nextStep,
+                      icon: _currentStep == 4 ? Icons.check_circle_outline_rounded : Icons.arrow_forward_rounded,
                     ),
                   ),
-                  const SizedBox(width: 12),
                 ],
-                Expanded(
-                  child: CustomButton(
-                    text: _currentStep == 4 ? 'Confirm & Book' : 'Continue',
-                    onPressed: _nextStep,
-                    icon: _currentStep == 4 ? Icons.check_circle_outline_rounded : Icons.arrow_forward_rounded,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -257,7 +259,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
   String _getStepTitle(int step) {
     switch (step) {
       case 0:
-        return 'Select Beauty Service';
+        return 'Select Beauty Services';
       case 1:
         return 'Choose Date & Time';
       case 2:
@@ -273,58 +275,100 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
   Widget _buildStepContent(List<BeautyService> services) {
     switch (_currentStep) {
       case 0:
+        final selectedSubtotal = _selectedServices.fold(0.0, (sum, s) => sum + s.price);
         return Column(
-          children: services.map((s) {
-            final isSelected = _selectedService?.id == s.id;
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedService = s;
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.roseLight : AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isSelected ? AppColors.secondary : AppColors.border,
-                    width: isSelected ? 1.5 : 0.8,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: AppColors.goldLight,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline_rounded, color: AppColors.secondary, size: 20),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      _selectedServices.isEmpty
+                          ? 'Tap to select one or multiple beauty services below.'
+                          : '${_selectedServices.length} service(s) selected • Subtotal: ₹${selectedSubtotal.toStringAsFixed(0)}',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ...services.map((s) {
+              final isSelected = _selectedServices.any((item) => item.id == s.id);
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (isSelected) {
+                      _selectedServices.removeWhere((item) => item.id == s.id);
+                    } else {
+                      _selectedServices.add(s);
+                    }
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.goldLight : AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected ? AppColors.secondary : AppColors.border,
+                      width: isSelected ? 1.8 : 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(s.imageUrl, width: 70, height: 70, fit: BoxFit.cover),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              s.title,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${s.duration} • ₹${s.price.toStringAsFixed(0)}',
+                              style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected ? AppColors.secondary : Colors.transparent,
+                          border: Border.all(
+                            color: isSelected ? AppColors.secondary : AppColors.border,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: isSelected
+                            ? const Icon(Icons.check, size: 16, color: Colors.white)
+                            : null,
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(s.imageUrl, width: 70, height: 70, fit: BoxFit.cover),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            s.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${s.duration} • ₹${s.price.toStringAsFixed(0)}',
-                            style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold, fontSize: 13),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(
-                      isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
-                      color: isSelected ? AppColors.secondary : AppColors.border,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+              );
+            }),
+          ],
         );
 
       case 1:
@@ -374,6 +418,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                 );
               }).toList(),
             ),
+            const SizedBox(height: 20),
           ],
         );
 
@@ -385,7 +430,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _locationType == 'At Salon' ? AppColors.roseLight : AppColors.white,
+                  color: _locationType == 'At Salon' ? AppColors.goldLight : AppColors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: _locationType == 'At Salon' ? AppColors.secondary : AppColors.border,
@@ -419,7 +464,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _locationType == 'At Home Service' ? AppColors.roseLight : AppColors.white,
+                  color: _locationType == 'At Home Service' ? AppColors.goldLight : AppColors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: _locationType == 'At Home Service' ? AppColors.secondary : AppColors.border,
@@ -462,7 +507,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
         );
 
       case 3:
-        final artists = _selectedService?.availableArtists ?? mockArtists;
+        const artists = mockArtists;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -477,7 +522,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: _selectedArtist == null ? AppColors.roseLight : AppColors.white,
+                  color: _selectedArtist == null ? AppColors.goldLight : AppColors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: _selectedArtist == null ? AppColors.secondary : AppColors.border,
@@ -515,7 +560,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.roseLight : AppColors.white,
+                    color: isSelected ? AppColors.goldLight : AppColors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: isSelected ? AppColors.secondary : AppColors.border,
@@ -558,9 +603,9 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
 
       case 4:
       default:
-        final servicePrice = _selectedService?.price ?? 0.0;
+        final servicesSubtotal = _selectedServices.fold(0.0, (sum, s) => sum + s.price);
         final extraCharge = _locationType == 'At Home Service' ? 500.0 : 0.0;
-        final total = servicePrice + extraCharge;
+        final total = servicesSubtotal + extraCharge;
 
         return Column(
           children: [
@@ -572,25 +617,34 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                 border: Border.all(color: AppColors.border),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(_selectedService!.imageUrl, width: 60, height: 60, fit: BoxFit.cover),
+                  const Text('Selected Services', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  const SizedBox(height: 12),
+                  ..._selectedServices.map((service) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(service.imageUrl, width: 48, height: 48, fit: BoxFit.cover),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(service.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                Text(service.duration, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                              ],
+                            ),
+                          ),
+                          Text('₹${service.price.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        ],
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(_selectedService!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                            Text('Duration: ${_selectedService!.duration}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    );
+                  }),
                   const Divider(height: 24),
                   _buildSummaryRow('Date', DateFormat('EEE, MMM d, yyyy').format(_selectedDate)),
                   _buildSummaryRow('Time Slot', _selectedTimeSlot),
@@ -599,7 +653,7 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                     _buildSummaryRow('Address', _addressController.text),
                   _buildSummaryRow('Artist', _selectedArtist?.name ?? 'Any Senior Specialist'),
                   const Divider(height: 24),
-                  _buildSummaryRow('Service Charge', '₹${servicePrice.toStringAsFixed(0)}'),
+                  _buildSummaryRow('Services Subtotal', '₹${servicesSubtotal.toStringAsFixed(0)}'),
                   if (extraCharge > 0)
                     _buildSummaryRow('At-Home Travel Charge', '₹${extraCharge.toStringAsFixed(0)}'),
                   const Divider(height: 24),

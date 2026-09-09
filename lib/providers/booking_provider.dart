@@ -4,7 +4,7 @@ import '../models/service.dart';
 import 'service_provider.dart';
 
 class BookingDraft {
-  final BeautyService? service;
+  final List<BeautyService> selectedServices;
   final DateTime? date;
   final String? timeSlot;
   final String locationType; // "At Salon", "At Home Service"
@@ -12,7 +12,7 @@ class BookingDraft {
   final Artist? selectedArtist;
 
   const BookingDraft({
-    this.service,
+    this.selectedServices = const [],
     this.date,
     this.timeSlot,
     this.locationType = "At Salon",
@@ -20,19 +20,18 @@ class BookingDraft {
     this.selectedArtist,
   });
 
-  bool get isValid => service != null && date != null && timeSlot != null;
+  bool get isValid => selectedServices.isNotEmpty && date != null && timeSlot != null;
 
-  double get totalAmount {
-    if (service == null) return 0.0;
-    double total = service!.price;
-    if (locationType == "At Home Service") {
-      total += 25.0; // At-home service charge
-    }
-    return total;
+  double get servicesSubtotal {
+    return selectedServices.fold(0.0, (sum, s) => sum + s.price);
   }
 
+  double get extraTravelCharge => locationType == "At Home Service" ? 500.0 : 0.0;
+
+  double get totalAmount => servicesSubtotal + extraTravelCharge;
+
   BookingDraft copyWith({
-    BeautyService? service,
+    List<BeautyService>? selectedServices,
     DateTime? date,
     String? timeSlot,
     String? locationType,
@@ -40,7 +39,7 @@ class BookingDraft {
     Artist? selectedArtist,
   }) {
     return BookingDraft(
-      service: service ?? this.service,
+      selectedServices: selectedServices ?? this.selectedServices,
       date: date ?? this.date,
       timeSlot: timeSlot ?? this.timeSlot,
       locationType: locationType ?? this.locationType,
@@ -55,24 +54,24 @@ class BookingNotifier extends StateNotifier<List<ServiceBooking>> {
       : super([
           ServiceBooking(
             bookingId: 'BK-89021',
-            service: mockBeautyServices[0],
+            services: [mockBeautyServices[0], mockBeautyServices[2]],
             date: DateTime.now().add(const Duration(days: 3)),
             timeSlot: '11:00 AM',
             locationType: 'At Salon',
             selectedArtist: mockArtists[0],
-            totalAmount: 350.00,
+            totalAmount: 22300.00,
             status: 'Upcoming',
             createdAt: DateTime.now().subtract(const Duration(days: 1)),
           ),
           ServiceBooking(
             bookingId: 'BK-88412',
-            service: mockBeautyServices[2],
+            services: [mockBeautyServices[2]],
             date: DateTime.now().subtract(const Duration(days: 12)),
             timeSlot: '03:00 PM',
             locationType: 'At Home Service',
             address: '42 Lotus Heights, Jubilee Hills, Hyderabad',
             selectedArtist: mockArtists[1],
-            totalAmount: 110.00,
+            totalAmount: 4300.00,
             status: 'Completed',
             createdAt: DateTime.now().subtract(const Duration(days: 15)),
           ),
@@ -81,7 +80,7 @@ class BookingNotifier extends StateNotifier<List<ServiceBooking>> {
   ServiceBooking createBooking(BookingDraft draft) {
     final newBooking = ServiceBooking(
       bookingId: 'BK-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
-      service: draft.service!,
+      services: List.from(draft.selectedServices),
       date: draft.date!,
       timeSlot: draft.timeSlot!,
       locationType: draft.locationType,
@@ -101,7 +100,7 @@ class BookingNotifier extends StateNotifier<List<ServiceBooking>> {
       if (b.bookingId == bookingId) {
         return ServiceBooking(
           bookingId: b.bookingId,
-          service: b.service,
+          services: b.services,
           date: b.date,
           timeSlot: b.timeSlot,
           locationType: b.locationType,

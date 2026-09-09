@@ -126,7 +126,7 @@ class ServiceCard extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             ref.read(bookingDraftProvider.notifier).state =
-                                BookingDraft(service: service);
+                                BookingDraft(selectedServices: [service]);
                             context.push('/book');
                           },
                           child: Container(

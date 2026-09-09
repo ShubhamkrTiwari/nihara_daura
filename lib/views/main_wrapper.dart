@@ -28,19 +28,20 @@ class MainWrapper extends ConsumerWidget {
       body: navigationShell,
       extendBody: true,
       bottomNavigationBar: SafeArea(
+        bottom: true,
         child: Container(
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          height: 68,
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 2),
+          height: 62,
           decoration: BoxDecoration(
-            color: AppColors.white.withValues(alpha: 0.96),
-            borderRadius: BorderRadius.circular(28),
+            color: AppColors.white.withValues(alpha: 0.98),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(color: AppColors.border, width: 1.2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.secondary.withValues(alpha: 0.18),
-                blurRadius: 20,
-                offset: const Offset(0, 6),
-                spreadRadius: 2,
+                color: AppColors.secondary.withValues(alpha: 0.16),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+                spreadRadius: 1,
               ),
             ],
           ),
@@ -69,12 +70,12 @@ class MainWrapper extends ConsumerWidget {
               GestureDetector(
                 onTap: () => _onTap(2),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
                     gradient: currentIndex == 2
                         ? AppColors.goldGradient
                         : AppColors.softGoldGradient,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: AppColors.primary,
                       width: currentIndex == 2 ? 1.5 : 0.8,
@@ -82,8 +83,8 @@ class MainWrapper extends ConsumerWidget {
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.secondary.withValues(alpha: currentIndex == 2 ? 0.35 : 0.15),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
@@ -92,10 +93,10 @@ class MainWrapper extends ConsumerWidget {
                     children: [
                       Icon(
                         currentIndex == 2 ? Icons.calendar_month_rounded : Icons.calendar_month_outlined,
-                        size: 20,
+                        size: 18,
                         color: currentIndex == 2 ? AppColors.white : AppColors.secondary,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 5),
                       Text(
                         'Book',
                         style: TextStyle(
@@ -149,11 +150,11 @@ class MainWrapper extends ConsumerWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: isSelected
             ? BoxDecoration(
                 color: AppColors.goldLight,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
               )
             : null,
@@ -165,7 +166,7 @@ class MainWrapper extends ConsumerWidget {
               children: [
                 Icon(
                   isSelected ? activeIcon : icon,
-                  size: 20,
+                  size: 18,
                   color: isSelected ? AppColors.secondary : AppColors.textSecondary,
                 ),
                 if (badgeCount > 0)
@@ -178,7 +179,7 @@ class MainWrapper extends ConsumerWidget {
                         gradient: AppColors.goldGradient,
                         shape: BoxShape.circle,
                       ),
-                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                      constraints: const BoxConstraints(minWidth: 15, minHeight: 15),
                       child: Text(
                         '$badgeCount',
                         style: const TextStyle(
@@ -192,7 +193,7 @@ class MainWrapper extends ConsumerWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
