@@ -75,18 +75,11 @@ class CustomButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            colors: [
-              AppColors.secondary,
-              Color(0xFF9E5460),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: AppColors.goldGradient,
           boxShadow: [
             BoxShadow(
-              color: AppColors.secondary.withValues(alpha: 0.3),
-              blurRadius: 10,
+              color: AppColors.secondary.withValues(alpha: 0.35),
+              blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],

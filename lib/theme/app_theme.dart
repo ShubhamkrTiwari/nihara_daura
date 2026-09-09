@@ -2,24 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Brand Color Palette
-  static const Color primary = Color(0xFFF7C6C7); // Soft Rose
-  static const Color secondary = Color(0xFFB76E79); // Rose Gold
-  static const Color accent = Color(0xFFD4AF37); // Champagne Gold
-  static const Color background = Color(0xFFFDF8F5); // Warm Cream
-  static const Color cardBg = Color(0xFFF5EDE6); // Soft Nude
-  static const Color textPrimary = Color(0xFF2C2C2C); // Deep Charcoal
-  static const Color textSecondary = Color(0xFF6B6B6B); // Soft Grey
-  static const Color border = Color(0xFFE8DAD0); // Soft Border Color
+  // Deeper Antique Dark Golden Brand Palette
+  static const Color primary = Color(0xFFB8860B); // Deep Amber Gold
+  static const Color secondary = Color(0xFF8B6508); // Antique Dark Gold
+  static const Color accent = Color(0xFFD4AF37); // Rich Metallic Sparkle Gold
+  static const Color background = Color(0xFFFAF2DF); // Warm Golden Sand Cream
+  static const Color cardBg = Color(0xFFFFFFFF); // Pure Crisp White Surface
+  static const Color textPrimary = Color(0xFF1A140E); // Deep Ebony Charcoal Text
+  static const Color textSecondary = Color(0xFF5C5046); // Warm Rich Bronze Taupe
+  static const Color border = Color(0xFFC8AD88); // Deep Metallic Gold Border
 
-  // Supplementary Colors
+  // Supplementary Colors & Deep Golden Tints
   static const Color white = Color(0xFFFFFFFF);
-  static const Color roseLight = Color(0xFFFFF2F2);
-  static const Color roseGoldLight = Color(0xFFF1D8DC);
-  static const Color goldLight = Color(0xFFFAF2DA);
+  static const Color goldLight = Color(0xFFF7E8CE); // Soft Golden Surface Tint
+  static const Color roseLight = Color(0xFFF7E8CE); // Alias for compatibility
+  static const Color goldMedium = Color(0xFFD8B984); // Medium Antique Gold Accent
+  static const Color goldDark = Color(0xFF503500); // Deep Antique Dark Gold Text
   static const Color starYellow = Color(0xFFFFB800);
-  static const Color success = Color(0xFF4CAF50);
-  static const Color shadow = Color(0x0F000000);
+  static const Color success = Color(0xFF2E7D32);
+  static const Color shadow = Color(0x228B6508);
+
+  // Deeper Rich Golden Ambient Background Gradient
+  static const LinearGradient bgGradient = LinearGradient(
+    colors: [
+      Color(0xFFFAF2DF), // Warm Golden Sand
+      Color(0xFFEEDCAE), // Rich Amber Gold Tint
+      Color(0xFFE0C896), // Deep Golden Surface
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  // Multi-tier Deeper Dark Golden Gradients
+  static const LinearGradient goldGradient = LinearGradient(
+    colors: [
+      Color(0xFFD4AF37),
+      Color(0xFFB8860B),
+      Color(0xFF8B6508),
+      Color(0xFF503500),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient darkGoldGradient = LinearGradient(
+    colors: [
+      Color(0xFF8B6508),
+      Color(0xFF503500),
+      Color(0xFF302000),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient softGoldGradient = LinearGradient(
+    colors: [
+      Color(0xFFF7E8CE),
+      Color(0xFFE6D0A2),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const LinearGradient cardGoldGradient = LinearGradient(
+    colors: [
+      Color(0xFFFFFFFF),
+      Color(0xFFFAF2DF),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }
 
 class AppTheme {
@@ -35,7 +87,7 @@ class AppTheme {
         primary: AppColors.secondary,
         secondary: AppColors.primary,
         tertiary: AppColors.accent,
-        surface: AppColors.background,
+        surface: AppColors.cardBg,
         onPrimary: AppColors.white,
         onSecondary: AppColors.textPrimary,
         onSurface: AppColors.textPrimary,
@@ -89,7 +141,7 @@ class AppTheme {
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
@@ -105,7 +157,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 0.5),
+          side: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         margin: EdgeInsets.zero,
       ),
@@ -113,8 +165,8 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondary,
           foregroundColor: AppColors.white,
-          elevation: 2,
-          shadowColor: AppColors.secondary.withValues(alpha: 0.3),
+          elevation: 3,
+          shadowColor: AppColors.secondary.withValues(alpha: 0.35),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -141,7 +193,7 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: AppColors.cardBg,
+        backgroundColor: AppColors.white,
         selectedColor: AppColors.secondary,
         disabledColor: Colors.grey.shade200,
         secondarySelectedColor: AppColors.secondary,
@@ -158,7 +210,7 @@ class AppTheme {
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: AppColors.border, width: 0.8),
+          side: const BorderSide(color: AppColors.border, width: 1.0),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -191,7 +243,7 @@ class AppTheme {
         selectedItemColor: AppColors.secondary,
         unselectedItemColor: AppColors.textSecondary,
         type: BottomNavigationBarType.fixed,
-        elevation: 8,
+        elevation: 10,
         selectedLabelStyle: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w600,

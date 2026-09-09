@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           gradient: LinearGradient(
             colors: [
               AppColors.background,
-              AppColors.roseLight,
+              AppColors.goldLight,
               AppColors.cardBg,
             ],
             begin: Alignment.topCenter,
@@ -81,12 +81,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.white,
-                          border: Border.all(color: AppColors.accent, width: 2),
+                          border: Border.all(color: AppColors.primary, width: 2.5),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.secondary.withValues(alpha: 0.2),
-                              blurRadius: 20,
-                              spreadRadius: 2,
+                              color: AppColors.secondary.withValues(alpha: 0.3),
+                              blurRadius: 24,
+                              spreadRadius: 4,
                             ),
                           ],
                         ),
@@ -116,15 +116,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       const SizedBox(height: 8),
                       Container(
                         width: 40,
-                        height: 1.5,
-                        color: AppColors.accent,
+                        height: 2,
+                        decoration: BoxDecoration(
+                          gradient: AppColors.goldGradient,
+                          borderRadius: BorderRadius.circular(1),
+                        ),
                       ),
                       const SizedBox(height: 12),
                       const Text(
-                        'SOFT • ELEGANT • LUXURIOUS',
+                        'ROYAL • ELEGANT • LUXURIOUS',
                         style: TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           letterSpacing: 3,
                           color: AppColors.secondary,
                         ),

@@ -25,7 +25,7 @@ class NiharaApp extends StatelessWidget {
     return MaterialApp.router(
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      title: 'Nihara Luxury',
+      title: 'Nihara D Aura',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       routerConfig: appRouter,

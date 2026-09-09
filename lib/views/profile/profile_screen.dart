@@ -10,179 +10,182 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: const NiharaAppBar(
         title: 'My Profile',
         showBackButton: false,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // User Header
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.border),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.shadow.withValues(alpha: 0.04),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.secondary, width: 2),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
+      body: Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(gradient: AppColors.bgGradient),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              // User Header Card
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.shadow.withValues(alpha: 0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.secondary, width: 2),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Ananya Roy',
-                          style: TextStyle(
-                            fontFamily: 'Playfair Display',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'ananya.roy@example.com',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                        ),
-                        SizedBox(height: 6),
-                        Row(
-                          children: [
-                            Icon(Icons.workspace_premium_rounded, size: 14, color: AppColors.accent),
-                            SizedBox(width: 4),
-                            Text(
-                              'Nihara Gold Member',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.accent,
-                              ),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Ananya Roy',
+                            style: TextStyle(
+                              fontFamily: 'Playfair Display',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'ananya.roy@example.com',
+                            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                          ),
+                          SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(Icons.workspace_premium_rounded, size: 14, color: AppColors.secondary),
+                              SizedBox(width: 4),
+                              Text(
+                                'Nihara Royal Gold Member',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
-                    onPressed: () {},
-                  ),
-                ],
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-            // Profile Options Menu
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.border),
+              // Profile Options Menu
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  children: [
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.shopping_bag_outlined,
+                      title: 'My Orders',
+                      subtitle: 'Track past purchases and active orders',
+                      onTap: () => context.push('/my-orders'),
+                    ),
+                    const Divider(height: 1),
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.calendar_month_outlined,
+                      title: 'My Bookings',
+                      subtitle: 'View upcoming salon & at-home appointments',
+                      onTap: () => context.push('/my-bookings'),
+                    ),
+                    const Divider(height: 1),
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.location_on_outlined,
+                      title: 'Saved Addresses',
+                      subtitle: 'Manage home & office delivery addresses',
+                      onTap: () => context.push('/addresses'),
+                    ),
+                    const Divider(height: 1),
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.favorite_border_rounded,
+                      title: 'My Wishlist',
+                      subtitle: 'Saved items & beauty favorites',
+                      onTap: () => context.go('/wishlist'),
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.shopping_bag_outlined,
-                    title: 'My Orders',
-                    subtitle: 'Track past purchases and active orders',
-                    onTap: () => context.push('/my-orders'),
-                  ),
-                  const Divider(height: 1),
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.calendar_month_outlined,
-                    title: 'My Bookings',
-                    subtitle: 'View upcoming salon & at-home appointments',
-                    onTap: () => context.push('/my-bookings'),
-                  ),
-                  const Divider(height: 1),
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.location_on_outlined,
-                    title: 'Saved Addresses',
-                    subtitle: 'Manage home & office delivery addresses',
-                    onTap: () => context.push('/addresses'),
-                  ),
-                  const Divider(height: 1),
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.favorite_border_rounded,
-                    title: 'My Wishlist',
-                    subtitle: 'Saved items & beauty favorites',
-                    onTap: () => context.go('/wishlist'),
-                  ),
-                ],
-              ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.border),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  children: [
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.help_outline_rounded,
+                      title: 'Help & Concierge Support',
+                      subtitle: '24/7 dedicated beauty advisor',
+                      onTap: () {},
+                    ),
+                    const Divider(height: 1),
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.settings_outlined,
+                      title: 'Settings',
+                      subtitle: 'Notifications, currency & privacy',
+                      onTap: () {},
+                    ),
+                    const Divider(height: 1),
+                    _buildOptionTile(
+                      context,
+                      icon: Icons.logout_rounded,
+                      title: 'Log Out',
+                      subtitle: 'Sign out from your Nihara account',
+                      isDestructive: true,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Logged out successfully')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.help_outline_rounded,
-                    title: 'Help & Concierge Support',
-                    subtitle: '24/7 dedicated beauty advisor',
-                    onTap: () {},
-                  ),
-                  const Divider(height: 1),
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.settings_outlined,
-                    title: 'Settings',
-                    subtitle: 'Notifications, currency & privacy',
-                    onTap: () {},
-                  ),
-                  const Divider(height: 1),
-                  _buildOptionTile(
-                    context,
-                    icon: Icons.logout_rounded,
-                    title: 'Log Out',
-                    subtitle: 'Sign out from your Nihara account',
-                    isDestructive: true,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Logged out successfully')),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

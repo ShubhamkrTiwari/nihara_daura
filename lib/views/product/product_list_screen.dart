@@ -229,148 +229,150 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
     final filter = ref.watch(productFilterProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: NiharaAppBar(
         title: filter.category == null || filter.category == 'All'
             ? 'All Products'
             : filter.category!,
         showBackButton: true,
       ),
-      body: Column(
-        children: [
-          // Search & Filter Row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search products, lipstick, candles...',
-                      prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear_rounded, size: 18),
-                              onPressed: () {
-                                _searchController.clear();
-                                ref.read(productFilterProvider.notifier).update((s) => s.copyWith(searchQuery: ''));
-                              },
-                            )
-                          : null,
-                    ),
-                    onChanged: (val) {
-                      ref.read(productFilterProvider.notifier).update((s) => s.copyWith(searchQuery: val));
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filledTonal(
-                  icon: const Icon(Icons.tune_rounded, color: AppColors.secondary),
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    side: const BorderSide(color: AppColors.border),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                  onPressed: _showFilterBottomSheet,
-                ),
-                IconButton.filledTonal(
-                  icon: const Icon(Icons.swap_vert_rounded, color: AppColors.secondary),
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    side: const BorderSide(color: AppColors.border),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                  onPressed: _showSortBottomSheet,
-                ),
-              ],
-            ),
-          ),
-
-          // Active Filters Row
-          if ((filter.category != null && filter.category != 'All') || filter.searchQuery.isNotEmpty)
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppColors.bgGradient),
+        child: Column(
+          children: [
+            // Search & Filter Row
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
                 children: [
-                  const Text('Active:', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-                  const SizedBox(width: 6),
-                  if (filter.category != null && filter.category != 'All')
-                    Chip(
-                      label: Text(filter.category!),
-                      onDeleted: () => ref.read(productFilterProvider.notifier).update((s) => s.copyWith(category: 'All')),
-                      deleteIcon: const Icon(Icons.cancel, size: 14),
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search products, lipstick, candles...',
+                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear_rounded, size: 18),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  ref.read(productFilterProvider.notifier).update((s) => s.copyWith(searchQuery: ''));
+                                },
+                              )
+                            : null,
+                      ),
+                      onChanged: (val) {
+                        ref.read(productFilterProvider.notifier).update((s) => s.copyWith(searchQuery: val));
+                      },
                     ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.tune_rounded, color: AppColors.secondary),
+                    style: IconButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                      side: const BorderSide(color: AppColors.border),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    onPressed: _showFilterBottomSheet,
+                  ),
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.swap_vert_rounded, color: AppColors.secondary),
+                    style: IconButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                      side: const BorderSide(color: AppColors.border),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    onPressed: _showSortBottomSheet,
+                  ),
                 ],
               ),
             ),
 
-          // Products Count Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${products.length} Items Found',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
-                  ),
+            // Active Filters Row
+            if ((filter.category != null && filter.category != 'All') || filter.searchQuery.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                child: Row(
+                  children: [
+                    const Text('Active:', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                    const SizedBox(width: 6),
+                    if (filter.category != null && filter.category != 'All')
+                      Chip(
+                        label: Text(filter.category!),
+                        onDeleted: () => ref.read(productFilterProvider.notifier).update((s) => s.copyWith(category: 'All')),
+                        deleteIcon: const Icon(Icons.cancel, size: 14),
+                      ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
 
-          // Grid View
-          Expanded(
-            child: products.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.search_off_rounded, size: 64, color: AppColors.border),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'No products found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Try adjusting your search or filters.',
-                          style: TextStyle(color: AppColors.textSecondary),
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            _searchController.clear();
-                            ref.read(productFilterProvider.notifier).update((s) => const ProductFilter());
-                          },
-                          child: const Text('Reset Filters'),
-                        ),
-                      ],
+            // Products Count Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${products.length} Items Found',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
                     ),
-                  )
-                : GridView.builder(
-                    padding: const EdgeInsets.all(20),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 14,
-                      mainAxisSpacing: 14,
-                    ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      return ProductCard(product: products[index], width: double.infinity);
-                    },
                   ),
-          ),
-        ],
+                ],
+              ),
+            ),
+
+            // Grid View
+            Expanded(
+              child: products.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.search_off_rounded, size: 64, color: AppColors.border),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'No products found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Try adjusting your search or filters.',
+                            style: TextStyle(color: AppColors.textSecondary),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              _searchController.clear();
+                              ref.read(productFilterProvider.notifier).update((s) => const ProductFilter());
+                            },
+                            child: const Text('Reset Filters'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(20),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.65,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
+                      ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(product: products[index], width: double.infinity);
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

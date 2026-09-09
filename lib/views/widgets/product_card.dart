@@ -28,12 +28,12 @@ class ProductCard extends ConsumerWidget {
         width: width,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border, width: 0.8),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border, width: 1.0),
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadow.withValues(alpha: 0.04),
-              blurRadius: 10,
+              color: AppColors.secondary.withValues(alpha: 0.1),
+              blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],
@@ -45,14 +45,14 @@ class ProductCard extends ConsumerWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
                   child: AspectRatio(
                     aspectRatio: 1.0,
                     child: Image.network(
                       product.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: AppColors.cardBg,
+                        color: AppColors.goldLight,
                         child: const Icon(
                           Icons.image_not_supported_outlined,
                           color: AppColors.textSecondary,
@@ -62,7 +62,7 @@ class ProductCard extends ConsumerWidget {
                   ),
                 ),
 
-                // Discount Badge
+                // Dark Golden Discount Badge
                 if (product.hasDiscount)
                   Positioned(
                     top: 8,
@@ -70,8 +70,14 @@ class ProductCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.secondary,
+                        gradient: AppColors.darkGoldGradient,
                         borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                          ),
+                        ],
                       ),
                       child: Text(
                         '${product.discountPercentage}% OFF',
@@ -95,12 +101,13 @@ class ProductCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.white.withValues(alpha: 0.9),
+                        color: AppColors.white.withValues(alpha: 0.95),
                         shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.border),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
+                            blurRadius: 6,
                           ),
                         ],
                       ),
@@ -128,10 +135,10 @@ class ProductCard extends ConsumerWidget {
                       children: [
                         Text(
                           product.category.toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 9,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.secondary.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary,
                             letterSpacing: 0.8,
                           ),
                         ),
@@ -206,14 +213,19 @@ class ProductCard extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: AppColors.cardBg,
+                              gradient: AppColors.goldGradient,
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColors.border),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.secondary.withValues(alpha: 0.2),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
                             child: const Icon(
                               Icons.add_shopping_cart_rounded,
                               size: 15,
-                              color: AppColors.secondary,
+                              color: AppColors.white,
                             ),
                           ),
                         ),

@@ -20,12 +20,12 @@ class ServiceCard extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 0.8),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border, width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow.withValues(alpha: 0.04),
-            blurRadius: 10,
+            color: AppColors.secondary.withValues(alpha: 0.08),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -35,7 +35,7 @@ class ServiceCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
+              borderRadius: const BorderRadius.horizontal(left: Radius.circular(18)),
               child: SizedBox(
                 width: 110,
                 child: Image.network(
@@ -43,7 +43,7 @@ class ServiceCard extends ConsumerWidget {
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
                     color: AppColors.cardBg,
-                    child: const Icon(Icons.spa_outlined, color: AppColors.textSecondary),
+                    child: const Icon(Icons.face_retouching_natural_outlined, color: AppColors.textSecondary),
                   ),
                 ),
               ),
@@ -64,14 +64,15 @@ class ServiceCard extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                               decoration: BoxDecoration(
-                                color: AppColors.roseLight,
+                                gradient: AppColors.softGoldGradient,
                                 borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: AppColors.border),
                               ),
                               child: Text(
                                 service.category,
                                 style: const TextStyle(
                                   fontSize: 10,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   color: AppColors.secondary,
                                 ),
                               ),
@@ -122,25 +123,32 @@ class ServiceCard extends ConsumerWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
                             ref.read(bookingDraftProvider.notifier).state =
                                 BookingDraft(service: service);
                             context.push('/book');
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.secondary,
-                            foregroundColor: AppColors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            shape: RoundedRectangleBorder(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              gradient: AppColors.goldGradient,
                               borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.secondary.withValues(alpha: 0.25),
+                                  blurRadius: 6,
+                                ),
+                              ],
                             ),
-                          ),
-                          child: const Text(
-                            'Book Now',
-                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                            child: const Text(
+                              'Book Now',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ],

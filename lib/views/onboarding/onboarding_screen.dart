@@ -17,12 +17,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingData> _pages = const [
     OnboardingData(
       title: 'Flawless Beauty & Bridal Glamour',
-      subtitle: 'Discover lightweight silk foundations, satin rose lipsticks, and bespoke makeup services designed for your unique glow.',
+      subtitle: 'Discover lightweight silk foundations, satin lipsticks, and bespoke makeup services designed for your royal glow.',
       imageUrl: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
       badge: 'MAKEUP & COSMETICS',
     ),
     OnboardingData(
-      title: 'Handcrafted Jewellery & Nail Art',
+      title: 'Handcrafted Gold Jewellery & Nail Art',
       subtitle: 'Elevate your style with 18k Rose Gold Kundan earrings and salon-quality press-on nails with real gold leaf accents.',
       imageUrl: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
       badge: 'JEWELLERY & NAILS',
@@ -137,7 +137,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.secondary.withValues(alpha: 0.15),
+                                color: AppColors.secondary.withValues(alpha: 0.2),
                                 blurRadius: 20,
                                 offset: const Offset(0, 10),
                               ),
@@ -158,9 +158,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.roseLight,
+                            color: AppColors.goldLight,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.6)),
                           ),
                           child: Text(
                             data.badge,
