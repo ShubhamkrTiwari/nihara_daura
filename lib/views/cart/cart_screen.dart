@@ -5,6 +5,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/cart_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/nihara_app_bar.dart';
+import '../widgets/auth_guard_dialog.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -77,7 +78,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 ),
               )
             : SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -303,7 +304,13 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     CustomButton(
                       text: 'Proceed to Checkout',
                       width: double.infinity,
-                      onPressed: () => context.push('/checkout'),
+                      onPressed: () async {
+                        if (await AuthGuard.checkAuth(context, ref)) {
+                          if (context.mounted) {
+                            context.push('/checkout');
+                          }
+                        }
+                      },
                       icon: Icons.lock_outline_rounded,
                     ),
                   ],

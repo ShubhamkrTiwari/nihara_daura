@@ -32,6 +32,7 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
   void _showFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
@@ -173,6 +174,7 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
   void _showSortBottomSheet() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),

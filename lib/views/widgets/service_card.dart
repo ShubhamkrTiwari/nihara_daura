@@ -5,6 +5,7 @@ import '../../models/service.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/booking_provider.dart';
 import 'rating_stars.dart';
+import 'auth_guard_dialog.dart';
 
 class ServiceCard extends ConsumerWidget {
   final BeautyService service;
@@ -124,10 +125,14 @@ class ServiceCard extends ConsumerWidget {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            ref.read(bookingDraftProvider.notifier).state =
-                                BookingDraft(selectedServices: [service]);
-                            context.push('/book');
+                          onTap: () async {
+                            if (await AuthGuard.checkAuth(context, ref)) {
+                              ref.read(bookingDraftProvider.notifier).state =
+                                  BookingDraft(selectedServices: [service]);
+                              if (context.mounted) {
+                                context.push('/book');
+                              }
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),

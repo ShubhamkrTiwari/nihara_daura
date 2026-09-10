@@ -6,6 +6,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/wishlist_provider.dart';
 import '../../providers/cart_provider.dart';
 import 'rating_stars.dart';
+import 'auth_guard_dialog.dart';
 
 class ProductCard extends ConsumerWidget {
   final Product product;
@@ -32,7 +33,7 @@ class ProductCard extends ConsumerWidget {
           border: Border.all(color: AppColors.border, width: 1.0),
           boxShadow: [
             BoxShadow(
-              color: AppColors.secondary.withValues(alpha: 0.1),
+              color: AppColors.secondary.withValues(alpha: 0.08),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -52,7 +53,7 @@ class ProductCard extends ConsumerWidget {
                       product.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: AppColors.goldLight,
+                        color: AppColors.cardBg,
                         child: const Icon(
                           Icons.image_not_supported_outlined,
                           color: AppColors.textSecondary,
@@ -62,7 +63,7 @@ class ProductCard extends ConsumerWidget {
                   ),
                 ),
 
-                // Dark Golden Discount Badge
+                // Golden Discount Badge
                 if (product.hasDiscount)
                   Positioned(
                     top: 8,
@@ -70,11 +71,11 @@ class ProductCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        gradient: AppColors.darkGoldGradient,
+                        gradient: AppColors.goldGradient,
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
+                            color: Colors.black.withValues(alpha: 0.15),
                             blurRadius: 4,
                           ),
                         ],
@@ -90,20 +91,22 @@ class ProductCard extends ConsumerWidget {
                     ),
                   ),
 
-                // Wishlist Button
+                // Wishlist Button Guarded
                 Positioned(
                   top: 6,
                   right: 6,
                   child: GestureDetector(
-                    onTap: () {
-                      ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+                    onTap: () async {
+                      if (await AuthGuard.checkAuth(context, ref)) {
+                        ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.white.withValues(alpha: 0.95),
+                        color: AppColors.white.withValues(alpha: 0.92),
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.1),
@@ -191,41 +194,41 @@ class ProductCard extends ConsumerWidget {
                             ],
                           ),
                         ),
+                        // Add to Cart Button Guarded
                         GestureDetector(
-                          onTap: () {
-                            ref.read(cartProvider.notifier).addItem(
-                                  product,
-                                  variant: product.variants.first,
-                                  size: product.sizes?.first,
+                          onTap: () async {
+                            if (await AuthGuard.checkAuth(context, ref)) {
+                              ref.read(cartProvider.notifier).addItem(
+                                    product,
+                                    variant: product.variants.first,
+                                    size: product.sizes?.first,
+                                  );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('${product.name} added to cart'),
+                                    backgroundColor: AppColors.secondary,
+                                    duration: const Duration(seconds: 2),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
                                 );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${product.name} added to cart'),
-                                backgroundColor: AppColors.secondary,
-                                duration: const Duration(seconds: 2),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            );
+                              }
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              gradient: AppColors.goldGradient,
+                              gradient: AppColors.softGoldGradient,
                               borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.secondary.withValues(alpha: 0.2),
-                                  blurRadius: 4,
-                                ),
-                              ],
+                              border: Border.all(color: AppColors.border),
                             ),
                             child: const Icon(
                               Icons.add_shopping_cart_rounded,
                               size: 15,
-                              color: AppColors.white,
+                              color: AppColors.secondary,
                             ),
                           ),
                         ),

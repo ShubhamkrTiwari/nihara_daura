@@ -8,6 +8,7 @@ import '../../providers/wishlist_provider.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/product_card.dart';
 import '../widgets/nihara_app_bar.dart';
+import '../widgets/auth_guard_dialog.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
   final String productId;
@@ -66,8 +67,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
               color: isFav ? AppColors.secondary : AppColors.textPrimary,
             ),
-            onPressed: () {
-              ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+            onPressed: () async {
+              if (await AuthGuard.checkAuth(context, ref)) {
+                ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+              }
             },
           ),
         ],
@@ -410,7 +413,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
         ),
       ),
 
-      // Bottom Add to Cart / Buy Now Sticky Bar
+      // Bottom Add to Cart / Buy Now Sticky Bar Guarded
       bottomSheet: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -427,20 +430,24 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: () {
-                  ref.read(cartProvider.notifier).addItem(
-                        product,
-                        variant: _selectedVariant,
-                        size: _selectedSize,
-                        quantity: _quantity,
+                onPressed: () async {
+                  if (await AuthGuard.checkAuth(context, ref)) {
+                    ref.read(cartProvider.notifier).addItem(
+                          product,
+                          variant: _selectedVariant,
+                          size: _selectedSize,
+                          quantity: _quantity,
+                        );
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${product.name} added to cart'),
+                          backgroundColor: AppColors.secondary,
+                          duration: const Duration(seconds: 2),
+                        ),
                       );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${product.name} added to cart'),
-                      backgroundColor: AppColors.secondary,
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
+                    }
+                  }
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.secondary, width: 1.5),
@@ -453,14 +460,18 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  ref.read(cartProvider.notifier).addItem(
-                        product,
-                        variant: _selectedVariant,
-                        size: _selectedSize,
-                        quantity: _quantity,
-                      );
-                  context.push('/cart');
+                onPressed: () async {
+                  if (await AuthGuard.checkAuth(context, ref)) {
+                    ref.read(cartProvider.notifier).addItem(
+                          product,
+                          variant: _selectedVariant,
+                          size: _selectedSize,
+                          quantity: _quantity,
+                        );
+                    if (context.mounted) {
+                      context.push('/cart');
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
